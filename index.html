@@ -99,15 +99,15 @@
   <div class="eyebrow">Technical exercise</div>
   <h1>Workday Integration Developer — XPath against a Workday report feed</h1>
   <p class="lede">
-    Below is a trimmed Workday Report-as-a-Service response. Write an XPath expression for each task and run it
-    against the live document. The page tells you immediately whether your expression returns the right nodes, so
-    you can iterate the way you would in a real integration build.
+    Below is a trimmed Workday Report-as-a-Service response. Write an XPath expression for each of the four tasks
+    and run it against the live document. The page tells you immediately whether your expression returns the right
+    nodes, so you can iterate the way you would in a real integration build.
   </p>
   <div class="meta">
-    <span>Suggested time <b>30 minutes</b></span>
-    <span>Tasks <b>10 XPath + 3 written</b></span>
+    <span>Suggested time <b>10 minutes</b></span>
+    <span>Tasks <b>4 selectors + 1 written</b></span>
     <span>Elapsed <b id="clock">00:00</b></span>
-    <span>Solved <b><span id="solved">0</span> / 10</b></span>
+    <span>Solved <b><span id="solved">0</span> / 4</b></span>
   </div>
 </header>
 
@@ -398,76 +398,34 @@
 
   var TASKS = [
     {
-      level: "Warm-up",
+      level: "Namespaces",
       prompt: "Select every worker record in this report.",
       ref: "Ly93ZDpSZXBvcnRfRW50cnk=",
-      hint: "If an unprefixed path returns nothing, ask yourself what the document's default namespace situation is."
+      hint: "If an unprefixed path returns nothing, ask yourself what namespace the elements in a Workday feed actually live in."
     },
     {
-      level: "Core",
-      prompt: "Return the Employee_ID of every contingent worker.",
-      ref: "Ly93ZDpSZXBvcnRfRW50cnlbd2Q6V29ya2VyX1R5cGU9J0NvbnRpbmdlbnQgV29ya2VyJ10vd2Q6RW1wbG95ZWVfSUQ=",
-      hint: "A predicate comparing a child element to a string literal is enough here."
-    },
-    {
-      level: "Core",
-      prompt: "Select every worker record that has a termination date at all — regardless of what the date is.",
-      ref: "Ly93ZDpSZXBvcnRfRW50cnlbd2Q6VGVybWluYXRpb25fRGF0ZV0=",
-      hint: "Existence of a node is itself a boolean in a predicate. You do not need to compare it to anything."
+      level: "Repeating groups",
+      prompt: "Return the Employee_ID of every worker with any allocation to cost centre CC-1400 — including workers who are only partly allocated to it, and without returning anyone twice.",
+      ref: "Ly93ZDpSZXBvcnRfRW50cnlbd2Q6Q29zdF9DZW50ZXJfQWxsb2NhdGlvbi93ZDpDb3N0X0NlbnRlcl9JRD0nQ0MtMTQwMCddL3dkOkVtcGxveWVlX0lE",
+      hint: "A predicate containing a multi-step path is true when any node along that path matches — so filter the worker, then step down to the ID."
     },
     {
       level: "Trap",
-      prompt: "Return the Employee_ID of every worker whose termination date is on or after 2026-09-28. Read your result carefully — the obvious expression is wrong here, and the engine will not warn you.",
+      prompt: "Return the Employee_ID of every worker whose termination date is on or after 2026-09-28. Read your result carefully: the obvious expression is wrong here and the engine will not warn you — it will just hand you a confident, silent answer.",
       ref: "Ly93ZDpSZXBvcnRfRW50cnlbdHJhbnNsYXRlKHdkOlRlcm1pbmF0aW9uX0RhdGUsJy0nLCcnKSA+PSAyMDI2MDkyOF0vd2Q6RW1wbG95ZWVfSUQ=",
-      hint: "In XPath 1.0 the relational operators convert both sides to numbers, and '2026-09-28' is not a number. Make the comparison numeric yourself."
+      hint: "In XPath 1.0 the relational operators convert both operands to numbers, and '2026-09-28' is not a number — it becomes NaN, and every comparison against NaN is false. Make the comparison numeric yourself."
     },
     {
-      level: "Core",
-      prompt: "Select every worker record that has no manager element.",
-      ref: "Ly93ZDpSZXBvcnRfRW50cnlbbm90KHdkOk1hbmFnZXIpXQ==",
-      hint: "Negate the existence test you used in task 3."
-    },
-    {
-      level: "Core",
-      prompt: "Return the Employee_ID of every worker with any allocation to cost center CC-1400, including workers who are only partly allocated to it.",
-      ref: "Ly93ZDpSZXBvcnRfRW50cnlbd2Q6Q29zdF9DZW50ZXJfQWxsb2NhdGlvbi93ZDpDb3N0X0NlbnRlcl9JRD0nQ0MtMTQwMCddL3dkOkVtcGxveWVlX0lE",
-      hint: "A predicate containing a multi-step path is true if any node on that path matches."
-    },
-    {
-      level: "Core",
-      prompt: "Return the number of workers who are both Worker_Type 'Employee' and Active '1'. The result should be a number, not a node set.",
-      ref: "Y291bnQoLy93ZDpSZXBvcnRfRW50cnlbd2Q6V29ya2VyX1R5cGU9J0VtcGxveWVlJ11bd2Q6QWN0aXZlPScxJ10p",
-      hint: "Two predicates in sequence behave as an AND."
-    },
-    {
-      level: "Deep",
-      prompt: "Return the Cost_Center_ID of each worker's second cost centre allocation. Only workers who actually have a second one should appear.",
-      ref: "Ly93ZDpSZXBvcnRfRW50cnkvd2Q6Q29zdF9DZW50ZXJfQWxsb2NhdGlvblsyXS93ZDpDb3N0X0NlbnRlcl9JRA==",
-      hint: "Positional predicates apply per context node. Note how this differs from wrapping the whole path in parentheses first."
-    },
-    {
-      level: "Deep",
+      level: "Composition",
       prompt: "Return the work email address of the manager of employee 100211 — resolved from the data, not hard-coded. The manager appears elsewhere in the file as a worker in their own right.",
       ref: "Ly93ZDpSZXBvcnRfRW50cnlbd2Q6RW1wbG95ZWVfSUQgPSAvL3dkOlJlcG9ydF9FbnRyeVt3ZDpFbXBsb3llZV9JRD0nMTAwMjExJ10vd2Q6TWFuYWdlci93ZDpFbXBsb3llZV9JRF0vd2Q6RW1haWxfV29yaw==",
-      hint: "A predicate can contain another absolute path. Use the inner path to produce the manager's ID and compare the outer worker's ID against it."
-    },
-    {
-      level: "Stretch",
-      prompt: "Select the Annual_Compensation Amount element belonging to the highest-paid worker, without hard-coding the value.",
-      ref: "Ly93ZDpBbW91bnRbbm90KC4gPCAvL3dkOkFtb3VudCldCg==",
-      hint: "XPath 1.0 has no max(). A node compared against a whole node set is true if it holds for any member — so express 'nothing is greater than me'."
+      hint: "A predicate can contain another absolute path. Use an inner path to produce the manager's ID, then compare each worker's own ID against it."
     }
   ];
 
   var SHORTS = [
     {
-      prompt: "Task 1: if your first attempt had been //Report_Entry it would have returned nothing, in this page and in a real Workday feed. Explain why, and give two ways you would deal with it in a tool where you cannot register a namespace prefix."
-    },
-    {
-      prompt: "Task 4: describe exactly what XPath 1.0 does when you write Termination_Date >= '2026-09-28'. Then tell us how you would implement a genuine 'terminated in the last 7 days' filter in a scheduled Workday outbound integration — including where you would prefer that filter to live."
-    },
-    {
-      prompt: "Write the XSLT template that turns this document into a pipe-delimited file: one line per worker with Employee_ID|Last,First|first allocation's cost centre|annual amount, followed by a trailer line reading TRAILER|<record count>. State whether you are writing 1.0 or 2.0 and note anything you would do differently in the other version."
+      prompt: "Two things from the tasks above, briefly. (a) Why would //Report_Entry have returned nothing here and in any real Workday feed, and how would you handle that in a tool where you cannot register a namespace prefix? (b) Task 3 is the shape of bug that ships a silently empty vendor file. How would you implement a genuine 'terminated in the last 7 days' filter in a scheduled Workday outbound integration, and where would you prefer that filter to live — the report, the transformation, or the middleware?"
     }
   ];
 
