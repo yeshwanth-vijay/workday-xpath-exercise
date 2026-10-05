@@ -417,9 +417,9 @@
     },
     {
       level: "Composition",
-      prompt: "Return the work email address of the manager of employee 100211 — resolved from the data, not hard-coded. The manager appears elsewhere in the file as a worker in their own right.",
-      ref: "Ly93ZDpSZXBvcnRfRW50cnlbd2Q6RW1wbG95ZWVfSUQgPSAvL3dkOlJlcG9ydF9FbnRyeVt3ZDpFbXBsb3llZV9JRD0nMTAwMjExJ10vd2Q6TWFuYWdlci93ZDpFbXBsb3llZV9JRF0vd2Q6RW1haWxfV29yaw==",
-      hint: "A predicate can contain another absolute path. Use an inner path to produce the manager's ID, then compare each worker's own ID against it."
+      prompt: "Return the work email address of every worker who manages at least one other worker in this file. Resolve it from the data — do not hard-code anyone's ID.",
+      ref: "Ly93ZDpSZXBvcnRfRW50cnlbd2Q6RW1wbG95ZWVfSUQgPSAvL3dkOk1hbmFnZXIvd2Q6RW1wbG95ZWVfSURdL3dkOkVtYWlsX1dvcms=",
+      hint: "In XPath 1.0, comparing one node set to another is true when any node on the left equals any node on the right. That single property is enough to correlate workers against the set of referenced managers."
     }
   ];
 
