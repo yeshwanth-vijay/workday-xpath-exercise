@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Workday Integration Developer — Interview Guide</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --panel: #f7f7f8;
+    --ink: #16181d;
+    --ink-2: #4a4f58;
+    --ink-3: #80858f;
+    --line: #e2e4e8;
+    --line-2: #cfd3da;
+    --accent: #1f5fd0;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 36px 24px 90px; }
+  .eyebrow { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+  h1 { font-size: 25px; margin: 6px 0 10px; font-weight: 650; letter-spacing: -0.01em; }
+  h2 { font-size: 13px; margin: 0; font-weight: 650; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); }
+  p { margin: 0 0 10px; color: var(--ink-2); }
+  .lede { max-width: 680px; }
+
+  .bar {
+    position: sticky; top: 0; z-index: 5; background: rgba(255,255,255,.94);
+    backdrop-filter: saturate(180%) blur(6px);
+    border-bottom: 1px solid var(--line); padding: 10px 0; margin-bottom: 26px;
+    display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+  }
+  .bar .spacer { flex: 1; }
+  .bar span { font-size: 12.5px; color: var(--ink-3); }
+  button {
+    font: inherit; font-size: 13px; border: 1px solid var(--line-2); background: #fff; color: var(--ink);
+    border-radius: 5px; padding: 6px 12px; cursor: pointer;
+  }
+  button:hover { background: var(--panel); }
+  button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+
+  header { border-bottom: 1px solid var(--line); padding-bottom: 22px; margin-bottom: 8px; }
+  .facts { display: flex; gap: 26px; flex-wrap: wrap; margin-top: 14px; font-size: 13px; color: var(--ink-3); }
+  .facts b { color: var(--ink); font-weight: 600; }
+
+  section { margin-top: 34px; }
+  .shead { display: flex; align-items: baseline; gap: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+  .shead .mins { font-size: 12.5px; color: var(--ink-3); }
+  .jd {
+    border-left: 2px solid var(--line-2); padding: 2px 0 2px 12px; margin: 12px 0 18px;
+    font-size: 13px; color: var(--ink-2);
+  }
+  .jd b { display: block; color: var(--ink-3); font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 3px; }
+
+  .q { padding: 14px 0; border-bottom: 1px dashed var(--line); }
+  .q:last-child { border-bottom: none; }
+  .qhead { display: flex; gap: 10px; align-items: baseline; }
+  .n { font-family: var(--mono); font-size: 12px; color: var(--ink-3); min-width: 20px; }
+  .qtext { font-weight: 500; }
+  .guide { margin: 8px 0 0 30px; font-size: 13.5px; color: var(--ink-2); }
+  .guide b { color: var(--ink); font-weight: 600; }
+  .hidden { display: none; }
+  .flag { display: inline-block; font-size: 11px; color: var(--accent); border: 1px solid #c6d6f2; border-radius: 10px; padding: 0 7px; margin-left: 8px; vertical-align: 1px; }
+
+  .note { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; font-size: 13.5px; color: var(--ink-2); margin-top: 22px; }
+  .note b { color: var(--ink); }
+  a { color: var(--accent); }
+  footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 12px; color: var(--ink-3); }
+
+  @media print {
+    .bar { display: none; }
+    body { font-size: 11pt; }
+    .q { break-inside: avoid; }
+    section { break-inside: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="bar">
+  <button id="toggle" aria-pressed="true">Hide answer guidance</button>
+  <button id="print">Print</button>
+  <div class="spacer"></div>
+  <span>19 questions · 7 sections · ~3 hours of panel time</span>
+</div>
+
+<header>
+  <div class="eyebrow">Interview guide</div>
+  <h1>Workday Integration Developer</h1>
+  <p class="lede">
+    The short list. This is the minimum set of questions that distinguishes someone who can build and run Workday
+    integrations from someone who has only consumed Workday as an API endpoint. Every section names the part of
+    the job description it is testing, and every question says what a good answer actually contains so two
+    interviewers grade the same way.
+  </p>
+  <div class="facts">
+    <span>Questions <b>19</b></span>
+    <span>Sections <b>7</b></span>
+    <span>Panel time <b>~3 hours</b></span>
+    <span>Separate hands-on <b><a href="./">XPath exercise</a></b></span>
+  </div>
+</header>
+
+<div class="note">
+  <b>How to run it.</b> Grade the reasoning, not the recall. Candidates coming from an iPaaS background will not
+  know Workday Studio or EIB vocabulary — that is expected and is not by itself disqualifying. What matters is
+  whether they can reason about the trade-offs, say plainly what they do not know, and describe a credible way to
+  close the gap. Questions marked <span class="flag">decides it</span> are the ones that should actually move your
+  vote.
+</div>
+
+<main id="content"></main>
+
+<footer>
+  Role-level interview guide. No candidate information on this page.
+</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var SECTIONS = [
+    {
+      title: "Workday platform fundamentals",
+      mins: "20 min",
+      jdArea: "What you'll bring",
+      jd: [
+        "2+ years' Workday Finance, HCM or Student experience, report writing and integrations",
+        "Good knowledge of Workday HCM, Finance and/or Student module concepts & capabilities",
+        "Collaborate with functional leads on system operations, security, business processes and how it relates to integrations"
+      ],
+      qs: [
+        {
+          q: "Walk me through the Workday object model. How do Worker, Position, Job Profile, Supervisory Organization and Cost Center relate — and which of those have you personally read or written from an integration?",
+          a: "Worker covers employees and contingent workers; Position Management versus Job Management as staffing models; the supervisory org drives both approval routing and security context; Cost Center as a worktag on the Financials side. The second half of the question is the real one — push until they name fields they actually pulled."
+        },
+        {
+          q: "Explain effective dating, and what breaks in an integration that ignores it.",
+          a: "Effective date is when a change takes effect in the business timeline; entry moment is when it was keyed. The trap is future-dated changes: a nightly delta querying 'as of today' misses a transfer entered today but effective next month, then re-sends it later as though it were new. Anyone who has run a Workday feed in production has been bitten by this."
+        },
+        {
+          q: "What is a Business Process in Workday, and what happens to a downstream integration when someone rescinds the event three days later?",
+          a: "BP definition with ordered steps, conditional rules, an integration step that fires an Integration System, and the distinction between correct, cancel and rescind. The rescind half tests whether they have thought about compensating actions — most downstream systems have no concept of 'undo the hire'."
+        },
+        {
+          q: "How do you give an integration least-privilege access in Workday?",
+          a: "An ISU with UI sessions disabled and password expiry off, attached to an ISSG, with Get and Put granted per domain, and the separate step of activating pending security policy changes. Constrained versus unconstrained groups scope by organisation. A vague answer here means they have never owned a Workday integration's security."
+        }
+      ]
+    },
+    {
+      title: "Workday integration tooling",
+      mins: "30 min",
+      jdArea: "Integrations Development",
+      jd: [
+        "Configure and develop technical integrations using Workday Studio, Workday RaaS Integrations, Enterprise Interface Builder (EIB), Web Services",
+        "Strong working knowledge of Workday Studio Development",
+        "Strong working knowledge of Workday EIB, RaaS, and Web Services"
+      ],
+      qs: [
+        {
+          decides: true,
+          q: "Pick the right Workday tool for three jobs and defend each: a one-time load of 5,000 compensation changes; a nightly outbound benefits file with field mapping and PGP; a real-time orchestration hitting three external APIs with conditional routing.",
+          a: "Inbound EIB; a Core Connector or EIB with custom XSLT; Studio or an external iPaaS because EIB cannot branch or orchestrate. The labels matter less than the reasoning about where each tool runs out of road. This is the single best proxy for whether someone can be trusted to choose an approach unsupervised."
+        },
+        {
+          q: "Walk me through building an outbound EIB. What are the three stages and your options at each?",
+          a: "Get Data from a custom report or RaaS with prompts; Transform with none, a delivered transformation, or custom XSLT; Deliver over SFTP, email, REST or as a Workday attachment, with PGP applied at delivery. Bonus if they say where the field mapping belongs and why not in the report."
+        },
+        {
+          q: "An inbound EIB loading 5,000 rows fails on row 2,847. What happened to the first 2,846, and how do you recover?",
+          a: "Workday commits row by row, so the load is partially applied and a naive re-run double-applies it. Recovery is the generated error output, fixing only the failures, and re-loading the remainder. Strong candidates also flag that a business process may have fired per row."
+        },
+        {
+          q: "In a Get_Workers call, explain Request_Criteria, Response_Group and Response_Filter. Which is the biggest lever on performance?",
+          a: "Response_Group, by a wide margin — each group pulls another subtree per worker and turns a fast call into a multi-minute one. Request_Criteria filters which workers, Response_Filter paginates. Follow up on how they paginate safely while the data underneath is changing."
+        },
+        {
+          decides: true,
+          q: "If you have not used Workday Studio: you have an outbound Studio build due in six weeks. What is your honest ramp plan, and what would make you tell us in week three that it will not land?",
+          a: "Self-awareness without deflection. Look for named resources, a sandbox tenant, shadowing an existing assembly, a conceptual bridge from whatever routing engine they do know, and a specific early checkpoint. Overclaiming here is more disqualifying than not knowing Studio."
+        }
+      ]
+    },
+    {
+      title: "Reporting",
+      mins: "15 min",
+      jdArea: "Reporting & Audits",
+      jd: [
+        "Serve as a Workday reporting authority, continuously optimising reporting capabilities",
+        "Configure and develop technical integrations using Complex Calculated Fields and Workday Custom Reports",
+        "Produce and review audit reports to assess integration performance and error handling"
+      ],
+      qs: [
+        {
+          q: "Explain Report-as-a-Service end to end — exposing a report, output formats, authentication, prompts. Then: a RaaS call returning 40,000 workers times out. What are your three levers?",
+          a: "Advanced report enabled as a web service, REST endpoint per format, ISU basic auth or OAuth, prompts as URL parameters with defaults for unattended runs. The three levers are narrowing the data source and filters, cutting returned fields and calculated fields, and chunking or paginating the pull."
+        },
+        {
+          q: "Which calculated field type gets you a formatted display name, a manager's email, a conditional value, and days since hire? And why are calculated fields the usual reason a report is slow?",
+          a: "Format Text, Lookup Related Value or Extract Single Instance, True/False Condition feeding Evaluate Expression, Date Difference. The performance point is the real test: they are evaluated per row at runtime, they are murder inside filters, and nesting them compounds the cost."
+        },
+        {
+          q: "Design a report that proves every terminated worker had downstream access revoked within 24 hours. What is the data source, the columns, and who reads it?",
+          a: "Termination event as the driver, joined to integration outcome and downstream confirmation, designed exception-first so it shows failures rather than 4,000 successes, scheduled to the control owner, and retained as an artefact an auditor would accept."
+        }
+      ]
+    },
+    {
+      title: "XSLT and transformation",
+      mins: "15 min",
+      jdArea: "What you'll bring",
+      jd: [
+        "Strong working knowledge of SOAP, REST, XML and XSLT, Java",
+        "Configure and develop technical integrations using XSLT and xPath",
+        "Integration frameworks (e.g., middleware, transformation logic)"
+      ],
+      qs: [
+        {
+          decides: true,
+          q: "Write the transform that turns a worker feed into a pipe-delimited file with a header row and a trailer row carrying the record count. Then: the vendor rejects the entire file if one record is malformed — where do you catch that, in the transform or before it?",
+          a: "Template matching the repeating element, header emitted once, count() in the trailer, text output method, and deliberate handling of the line separator. The second half is the senior half: validation belongs before delivery so the vendor is never the first detector, with the bad records quarantined and reported rather than silently dropped."
+        },
+        {
+          q: "You are handed a namespaced Workday response and your XPath returns nothing. What is happening, and what do you do in a tool where you cannot register a prefix?",
+          a: "Everything in a Workday feed sits in the Workday namespace, so an unprefixed step matches a null-namespace element that does not exist. Fallbacks are local-name() predicates or stripping the namespace upstream. Covered hands-on by the separate XPath exercise — use this only if you are not running that."
+        }
+      ]
+    },
+    {
+      title: "Integration design",
+      mins: "30 min",
+      jdArea: "Integrations Development + Administration",
+      jd: [
+        "Lead the research, design, development, testing and delivery of new Workday and third-party integrations",
+        "Create detailed integration specifications, field mappings, and designs across the deployment life-cycle",
+        "Research integration failures, perform root cause analyses, and report back to management"
+      ],
+      qs: [
+        {
+          decides: true,
+          q: "Whiteboard this. Outbound Workday to a benefits vendor: weekly full file plus daily deltas, PGP over SFTP, the vendor needs a control-total trailer and rejects the whole file on one bad record. Design it end to end, including failure and reconciliation.",
+          a: "The anchor design question. Expect a tool choice with a reason, filtering pushed upstream, pre-delivery validation, PGP and key handling, delivery confirmation rather than assumed success, a defined re-run path after rejection, and a reconciliation report proving both sides agree. Follow up with: the vendor says Tuesday's file never arrived but your log says delivered — how do you settle it?"
+        },
+        {
+          q: "Design an idempotency strategy for a webhook-triggered integration whose source fires duplicates.",
+          a: "A durable idempotency key from the source event, a dedupe store with a sensible window, distinguishing a duplicate delivery from a genuine second change to the same record, and making the downstream write an upsert where the API allows. Ask what they do when there is no stable event id."
+        },
+        {
+          q: "Define your error taxonomy. Data error, config error, transient failure, vendor outage — who gets paged for each and which auto-retry?",
+          a: "A clear retryable versus non-retryable line, data errors routed to the business owner rather than engineering, backoff with a cap, and a circuit breaker so a vendor outage does not fire 400 alerts. This question sorts people who have carried a pager from people who have not."
+        }
+      ]
+    },
+    {
+      title: "Release management and production support",
+      mins: "25 min",
+      jdArea: "Integrations Administration",
+      jd: [
+        "Participate in Workday semi-yearly release reviews and testing; coordinate integration testing pre-requisites for releases",
+        "Monitor system health, scheduled jobs, alerts and notifications",
+        "Monitor, track progress and resolve enterprise system support tickets and support escalated issues"
+      ],
+      qs: [
+        {
+          q: "Workday ships two mandatory releases a year plus weekly service updates. You have 120 integrations and a two-week preview window. What do you test, what do you accept risk on, and what do you hand the business as sign-off?",
+          a: "Sandbox Preview as the window; the risk surface is deprecated web service versions, changed report data sources and altered calculated field behaviour. The answer should rank by business criticality and blast radius rather than attempting all 120, and sign-off should be a documented test matrix, not a verbal thumbs-up."
+        },
+        {
+          decides: true,
+          q: "It is 7am. Payroll closes at 10am. The overnight inbound time-tracking integration reported success but loaded zero records. Walk me through your first thirty minutes — and tell me what you do if at 9:30 you still have no root cause.",
+          a: "Confirm blast radius before touching anything, establish whether the source file was missing or merely empty, and tell the payroll owner immediately rather than after a fix exists. The tell is whether they communicate early or vanish into debugging. At 9:30 the right answer is a manual fallback and an explicit call, not another ten minutes of theorising."
+        },
+        {
+          q: "What do you monitor on an integration beyond 'did it throw an error'?",
+          a: "Missed schedule runs, record counts against a rolling baseline, the delivered-but-empty case, downstream acknowledgement rather than successful send, and error-rate thresholds instead of single-error pages. Ask which alert fired most often and whether they ever tuned one down — and what that cost them."
+        }
+      ]
+    },
+    {
+      title: "Judgment and ownership",
+      mins: "25 min",
+      jdArea: "Technical Leadership and Project Management",
+      jd: [
+        "Serve as the subject matter expert on large collections of Workday integrations",
+        "Understand the business problems and build efficient solutions using the Workday platform, middleware tools and source/target capabilities",
+        "Be a strong contributor to the product vision and drive team planning"
+      ],
+      qs: [
+        {
+          decides: true,
+          q: "When does an integration belong in Workday-native tooling rather than an iPaaS — even when you could build it faster in the iPaaS?",
+          a: "The key judgment question for this role. Good answers weigh PII leaving the tenant, Workday security and audit boundaries, per-task licensing at volume, who carries support, the semi-annual regression burden on each side, and latency. 'Everything should be a recipe' is a poor fit for a Workday-centric estate; so is dogmatic refusal to use middleware."
+        },
+        {
+          q: "You inherit a large estate of integrations you did not build. What are your first 90 days?",
+          a: "Catalogue every integration with owner, schedule, criticality and data classification; find the undocumented ones by watching what actually runs; rank by blast radius; fix documentation debt on the critical few. Candidates who open with a rewrite plan have not run an estate before."
+        },
+        {
+          q: "Tell me about an integration you shipped that broke in production. What was the blast radius, and did you find it or did the business?",
+          a: "Specificity and ownership without self-flagellation. The detection half is the signal: 'the business told us, so I added monitoring for that class of failure' beats a story in which nothing ever broke."
+        }
+      ]
+    }
+  ];
+
+  var html = "";
+  var n = 0;
+  SECTIONS.forEach(function (s) {
+    html += '<section><div class="shead"><h2>' + s.title + '</h2><span class="mins">' + s.mins + '</span></div>';
+    html += '<div class="jd"><b>JD — ' + s.jdArea + '</b>' +
+      s.jd.map(function (b) { return '<div>' + b + '</div>'; }).join("") + '</div>';
+    s.qs.forEach(function (q) {
+      n++;
+      html += '<div class="q"><div class="qhead"><span class="n">' + String(n).padStart(2, "0") + '</span>' +
+        '<span class="qtext">' + q.q + (q.decides ? '<span class="flag">decides it</span>' : '') + '</span></div>' +
+        '<div class="guide"><b>Looking for.</b> ' + q.a + '</div></div>';
+    });
+    html += '</section>';
+  });
+  document.getElementById("content").innerHTML = html;
+
+  var btn = document.getElementById("toggle");
+  btn.addEventListener("click", function () {
+    var on = btn.getAttribute("aria-pressed") === "true";
+    btn.setAttribute("aria-pressed", String(!on));
+    btn.textContent = on ? "Show answer guidance" : "Hide answer guidance";
+    document.querySelectorAll(".guide").forEach(function (g) { g.classList.toggle("hidden", on); });
+  });
+  document.getElementById("print").addEventListener("click", function () { window.print(); });
+})();
+</script>
+</body>
+</html>
