@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Workday Integration Developer — XPath Exercise</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --panel: #f7f7f8;
+    --ink: #16181d;
+    --ink-2: #4a4f58;
+    --ink-3: #80858f;
+    --line: #e2e4e8;
+    --line-2: #cfd3da;
+    --accent: #1f5fd0;
+    --pass: #1d7a4f;
+    --fail: #b23b2e;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 32px 24px 80px; }
+  header { border-bottom: 1px solid var(--line); padding-bottom: 20px; margin-bottom: 24px; }
+  .eyebrow { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+  h1 { font-size: 24px; margin: 6px 0 8px; font-weight: 650; }
+  h2 { font-size: 17px; margin: 32px 0 10px; font-weight: 650; }
+  h3 { font-size: 14px; margin: 0 0 6px; font-weight: 650; }
+  p { margin: 0 0 10px; color: var(--ink-2); }
+  .lede { color: var(--ink-2); max-width: 760px; }
+  .meta { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 14px; font-size: 13px; color: var(--ink-3); }
+  .meta b { color: var(--ink); font-weight: 600; }
+
+  .cols { display: grid; grid-template-columns: minmax(0,1fr) 420px; gap: 28px; align-items: start; }
+  @media (max-width: 1000px) { .cols { grid-template-columns: 1fr; } }
+
+  .xmlpanel { position: sticky; top: 20px; }
+  .xmlbox {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 6px;
+    max-height: 72vh; overflow: auto; padding: 12px 14px;
+  }
+  pre { margin: 0; font-family: var(--mono); font-size: 11.5px; line-height: 1.5; color: #2b2f36; white-space: pre; }
+
+  .task { border: 1px solid var(--line); border-radius: 6px; padding: 16px 18px; margin-bottom: 12px; background: #fff; }
+  .task.done { border-color: #bcdcc9; }
+  .task.wrong { border-color: #e8c4bf; }
+  .thead { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+  .num { font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
+  .tag { font-size: 11px; color: var(--ink-3); border: 1px solid var(--line-2); border-radius: 10px; padding: 1px 8px; }
+  .prompt { color: var(--ink); margin-bottom: 10px; }
+  .row { display: flex; gap: 8px; align-items: stretch; }
+  input[type=text], textarea {
+    width: 100%; font-family: var(--mono); font-size: 13px; color: var(--ink);
+    border: 1px solid var(--line-2); border-radius: 5px; padding: 9px 10px; background: #fff;
+  }
+  input[type=text]:focus, textarea:focus { outline: 2px solid #bcd0f0; outline-offset: -1px; border-color: var(--accent); }
+  textarea { min-height: 120px; line-height: 1.5; }
+  button {
+    font: inherit; font-size: 13px; border: 1px solid var(--line-2); background: #fff; color: var(--ink);
+    border-radius: 5px; padding: 8px 14px; cursor: pointer; white-space: nowrap;
+  }
+  button:hover { background: var(--panel); }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button.primary:hover { filter: brightness(1.07); }
+  button.link { border: none; background: none; color: var(--accent); padding: 4px 0; text-decoration: underline; }
+
+  .out { margin-top: 10px; font-size: 13px; }
+  .verdict { font-weight: 650; }
+  .verdict.pass { color: var(--pass); }
+  .verdict.fail { color: var(--fail); }
+  .nodes { margin-top: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 5px; padding: 8px 10px; max-height: 170px; overflow: auto; }
+  .nodes code { font-family: var(--mono); font-size: 11.5px; display: block; color: #2b2f36; white-space: pre-wrap; }
+  .hint { margin-top: 8px; font-size: 13px; color: var(--ink-2); background: #fbf8ee; border: 1px solid #ece2c4; border-radius: 5px; padding: 8px 10px; }
+  .counter { font-size: 12px; color: var(--ink-3); margin-top: 8px; }
+
+  .note { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; font-size: 13.5px; color: var(--ink-2); }
+  .note b { color: var(--ink); }
+  ol.rules { margin: 8px 0 0 18px; padding: 0; color: var(--ink-2); font-size: 13.5px; }
+  ol.rules li { margin-bottom: 4px; }
+  .sa { border: 1px solid var(--line); border-radius: 6px; padding: 16px 18px; margin-bottom: 12px; }
+  .summary { border: 1px solid var(--line-2); border-radius: 6px; padding: 18px 20px; margin-top: 10px; background: var(--panel); }
+  .scorerow { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 14px; }
+  .score b { display: block; font-size: 22px; font-weight: 650; }
+  .score span { font-size: 12px; color: var(--ink-3); }
+  #report { width: 100%; min-height: 260px; font-family: var(--mono); font-size: 11.5px; margin-top: 12px; }
+  footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 12px; color: var(--ink-3); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Technical exercise</div>
+  <h1>Workday Integration Developer — XPath against a Workday report feed</h1>
+  <p class="lede">
+    Below is a trimmed Workday Report-as-a-Service response. Write an XPath expression for each task and run it
+    against the live document. The page tells you immediately whether your expression returns the right nodes, so
+    you can iterate the way you would in a real integration build.
+  </p>
+  <div class="meta">
+    <span>Suggested time <b>30 minutes</b></span>
+    <span>Tasks <b>10 XPath + 3 written</b></span>
+    <span>Elapsed <b id="clock">00:00</b></span>
+    <span>Solved <b><span id="solved">0</span> / 10</b></span>
+  </div>
+</header>
+
+<div class="note">
+  <b>How this works.</b> Everything runs in your browser — nothing is uploaded and nothing is saved anywhere.
+  When you finish, press <b>Generate report</b> at the bottom and send us the text it produces.
+  <ol class="rules">
+    <li>The XPath engine here is your browser's, which is XPath <b>1.0</b> — the same dialect as classic Workday EIB document transformation. Behave accordingly.</li>
+    <li>The namespace prefix <code>wd</code> is pre-registered to the document's namespace, so <code>wd:</code> paths work as written. Expressions using <code>local-name()</code> work too.</li>
+    <li>Retries and hints are allowed and are recorded in the report. Use them — how you converge matters more than getting it first try.</li>
+    <li>Please don't paste the question into an LLM. We will talk through your expressions live afterwards.</li>
+  </ol>
+</div>
+
+<div class="cols" style="margin-top:24px">
+  <main>
+    <h2>XPath tasks</h2>
+    <div id="tasks"></div>
+
+    <h2>Written answers</h2>
+    <p class="lede" style="font-size:14px">Short paragraphs are fine. These are not auto-checked.</p>
+    <div id="shorts"></div>
+
+    <h2>Finish</h2>
+    <div class="summary">
+      <div class="scorerow">
+        <div class="score"><b id="s-solved">0</b><span>XPath tasks solved</span></div>
+        <div class="score"><b id="s-attempts">0</b><span>Total runs</span></div>
+        <div class="score"><b id="s-hints">0</b><span>Hints opened</span></div>
+        <div class="score"><b id="s-time">00:00</b><span>Elapsed</span></div>
+      </div>
+      <div class="row">
+        <input type="text" id="who" placeholder="Your name" style="max-width:280px" />
+        <button class="primary" id="gen">Generate report</button>
+        <button id="copy">Copy</button>
+        <button id="dl">Download .txt</button>
+      </div>
+      <textarea id="report" placeholder="Your report will appear here." spellcheck="false"></textarea>
+    </div>
+  </main>
+
+  <aside class="xmlpanel">
+    <h3>Source document <span class="tag" style="margin-left:6px">read-only</span></h3>
+    <div class="xmlbox"><pre id="xmlview"></pre></div>
+  </aside>
+</div>
+
+<footer>
+  Client-side exercise page. No tracking, no account, no submission endpoint.
+</footer>
+</div>
+
+<script type="text/plain" id="src-xml"><?xml version="1.0" encoding="UTF-8"?>
+<wd:Report_Data xmlns:wd="urn:com.workday/bsvc">
+  <wd:Report_Entry>
+    <wd:Employee_ID>100211</wd:Employee_ID>
+    <wd:Legal_Name>
+      <wd:First_Name>Amara</wd:First_Name>
+      <wd:Last_Name>Okonkwo</wd:Last_Name>
+    </wd:Legal_Name>
+    <wd:Worker_Type>Employee</wd:Worker_Type>
+    <wd:Active>1</wd:Active>
+    <wd:Hire_Date>2019-04-15</wd:Hire_Date>
+    <wd:Email_Work>amara.okonkwo@example.edu</wd:Email_Work>
+    <wd:Job_Profile>Senior Accountant</wd:Job_Profile>
+    <wd:Manager>
+      <wd:Employee_ID>100244</wd:Employee_ID>
+      <wd:Name>Priya Raghavan</wd:Name>
+    </wd:Manager>
+    <wd:Cost_Center_Allocation>
+      <wd:Cost_Center_ID>CC-1200</wd:Cost_Center_ID>
+      <wd:Percent>100</wd:Percent>
+    </wd:Cost_Center_Allocation>
+    <wd:Annual_Compensation>
+      <wd:Amount>96000</wd:Amount>
+      <wd:Currency>USD</wd:Currency>
+    </wd:Annual_Compensation>
+  </wd:Report_Entry>
+  <wd:Report_Entry>
+    <wd:Employee_ID>100223</wd:Employee_ID>
+    <wd:Legal_Name>
+      <wd:First_Name>Daniel</wd:First_Name>
+      <wd:Last_Name>Ferreira</wd:Last_Name>
+    </wd:Legal_Name>
+    <wd:Worker_Type>Employee</wd:Worker_Type>
+    <wd:Active>0</wd:Active>
+    <wd:Hire_Date>2017-02-01</wd:Hire_Date>
+    <wd:Termination_Date>2026-09-30</wd:Termination_Date>
+    <wd:Email_Work>daniel.ferreira@example.edu</wd:Email_Work>
+    <wd:Job_Profile>Payroll Analyst</wd:Job_Profile>
+    <wd:Manager>
+      <wd:Employee_ID>100244</wd:Employee_ID>
+      <wd:Name>Priya Raghavan</wd:Name>
+    </wd:Manager>
+    <wd:Cost_Center_Allocation>
+      <wd:Cost_Center_ID>CC-1200</wd:Cost_Center_ID>
+      <wd:Percent>100</wd:Percent>
+    </wd:Cost_Center_Allocation>
+    <wd:Annual_Compensation>
+      <wd:Amount>88000</wd:Amount>
+      <wd:Currency>USD</wd:Currency>
+    </wd:Annual_Compensation>
+  </wd:Report_Entry>
+  <wd:Report_Entry>
+    <wd:Employee_ID>100228</wd:Employee_ID>
+    <wd:Legal_Name>
+      <wd:First_Name>Mei Lin</wd:First_Name>
+      <wd:Last_Name>Chen</wd:Last_Name>
+    </wd:Legal_Name>
+    <wd:Worker_Type>Contingent Worker</wd:Worker_Type>
+    <wd:Active>1</wd:Active>
+    <wd:Hire_Date>2025-11-03</wd:Hire_Date>
+    <wd:Email_Work>meilin.chen@contractor.example.edu</wd:Email_Work>
+    <wd:Job_Profile>Integration Contractor</wd:Job_Profile>
+    <wd:Manager>
+      <wd:Employee_ID>100211</wd:Employee_ID>
+      <wd:Name>Amara Okonkwo</wd:Name>
+    </wd:Manager>
+    <wd:Cost_Center_Allocation>
+      <wd:Cost_Center_ID>CC-1400</wd:Cost_Center_ID>
+      <wd:Percent>100</wd:Percent>
+    </wd:Cost_Center_Allocation>
+  </wd:Report_Entry>
+  <wd:Report_Entry>
+    <wd:Employee_ID>100233</wd:Employee_ID>
+    <wd:Legal_Name>
+      <wd:First_Name>Tomas</wd:First_Name>
+      <wd:Last_Name>Vinter</wd:Last_Name>
+    </wd:Legal_Name>
+    <wd:Worker_Type>Employee</wd:Worker_Type>
+    <wd:Active>0</wd:Active>
+    <wd:Hire_Date>2021-07-19</wd:Hire_Date>
+    <wd:Termination_Date>2026-10-02</wd:Termination_Date>
+    <wd:Email_Work>tomas.vinter@example.edu</wd:Email_Work>
+    <wd:Job_Profile>Benefits Specialist</wd:Job_Profile>
+    <wd:Manager>
+      <wd:Employee_ID>100244</wd:Employee_ID>
+      <wd:Name>Priya Raghavan</wd:Name>
+    </wd:Manager>
+    <wd:Cost_Center_Allocation>
+      <wd:Cost_Center_ID>CC-1400</wd:Cost_Center_ID>
+      <wd:Percent>100</wd:Percent>
+    </wd:Cost_Center_Allocation>
+    <wd:Annual_Compensation>
+      <wd:Amount>72000</wd:Amount>
+      <wd:Currency>USD</wd:Currency>
+    </wd:Annual_Compensation>
+  </wd:Report_Entry>
+  <wd:Report_Entry>
+    <wd:Employee_ID>100244</wd:Employee_ID>
+    <wd:Legal_Name>
+      <wd:First_Name>Priya</wd:First_Name>
+      <wd:Last_Name>Raghavan</wd:Last_Name>
+    </wd:Legal_Name>
+    <wd:Worker_Type>Employee</wd:Worker_Type>
+    <wd:Active>1</wd:Active>
+    <wd:Hire_Date>2015-01-05</wd:Hire_Date>
+    <wd:Email_Work>priya.raghavan@example.edu</wd:Email_Work>
+    <wd:Job_Profile>Finance Manager</wd:Job_Profile>
+    <wd:Manager>
+      <wd:Employee_ID>100301</wd:Employee_ID>
+      <wd:Name>Evelyn Shaw</wd:Name>
+    </wd:Manager>
+    <wd:Cost_Center_Allocation>
+      <wd:Cost_Center_ID>CC-1200</wd:Cost_Center_ID>
+      <wd:Percent>100</wd:Percent>
+    </wd:Cost_Center_Allocation>
+    <wd:Annual_Compensation>
+      <wd:Amount>154000</wd:Amount>
+      <wd:Currency>USD</wd:Currency>
+    </wd:Annual_Compensation>
+  </wd:Report_Entry>
+  <wd:Report_Entry>
+    <wd:Employee_ID>100251</wd:Employee_ID>
+    <wd:Legal_Name>
+      <wd:First_Name>Jonas</wd:First_Name>
+      <wd:Last_Name>Weber</wd:Last_Name>
+    </wd:Legal_Name>
+    <wd:Worker_Type>Contingent Worker</wd:Worker_Type>
+    <wd:Active>1</wd:Active>
+    <wd:Hire_Date>2026-03-16</wd:Hire_Date>
+    <wd:Email_Work>jonas.weber@contractor.example.edu</wd:Email_Work>
+    <wd:Job_Profile>Data Migration Contractor</wd:Job_Profile>
+    <wd:Manager>
+      <wd:Employee_ID>100244</wd:Employee_ID>
+      <wd:Name>Priya Raghavan</wd:Name>
+    </wd:Manager>
+    <wd:Cost_Center_Allocation>
+      <wd:Cost_Center_ID>CC-1600</wd:Cost_Center_ID>
+      <wd:Percent>100</wd:Percent>
+    </wd:Cost_Center_Allocation>
+  </wd:Report_Entry>
+  <wd:Report_Entry>
+    <wd:Employee_ID>100266</wd:Employee_ID>
+    <wd:Legal_Name>
+      <wd:First_Name>Sofia</wd:First_Name>
+      <wd:Last_Name>Marchetti</wd:Last_Name>
+    </wd:Legal_Name>
+    <wd:Worker_Type>Employee</wd:Worker_Type>
+    <wd:Active>1</wd:Active>
+    <wd:Hire_Date>2022-09-12</wd:Hire_Date>
+    <wd:Email_Work>sofia.marchetti@example.edu</wd:Email_Work>
+    <wd:Job_Profile>Systems Analyst</wd:Job_Profile>
+    <wd:Manager>
+      <wd:Employee_ID>100211</wd:Employee_ID>
+      <wd:Name>Amara Okonkwo</wd:Name>
+    </wd:Manager>
+    <wd:Cost_Center_Allocation>
+      <wd:Cost_Center_ID>CC-1200</wd:Cost_Center_ID>
+      <wd:Percent>60</wd:Percent>
+    </wd:Cost_Center_Allocation>
+    <wd:Cost_Center_Allocation>
+      <wd:Cost_Center_ID>CC-1400</wd:Cost_Center_ID>
+      <wd:Percent>40</wd:Percent>
+    </wd:Cost_Center_Allocation>
+    <wd:Annual_Compensation>
+      <wd:Amount>110000</wd:Amount>
+      <wd:Currency>USD</wd:Currency>
+    </wd:Annual_Compensation>
+  </wd:Report_Entry>
+  <wd:Report_Entry>
+    <wd:Employee_ID>100277</wd:Employee_ID>
+    <wd:Legal_Name>
+      <wd:First_Name>Hassan</wd:First_Name>
+      <wd:Last_Name>Bello</wd:Last_Name>
+    </wd:Legal_Name>
+    <wd:Worker_Type>Employee</wd:Worker_Type>
+    <wd:Active>0</wd:Active>
+    <wd:Hire_Date>2018-05-21</wd:Hire_Date>
+    <wd:Termination_Date>2026-08-14</wd:Termination_Date>
+    <wd:Email_Work>hassan.bello@example.edu</wd:Email_Work>
+    <wd:Job_Profile>Procurement Analyst</wd:Job_Profile>
+    <wd:Manager>
+      <wd:Employee_ID>100301</wd:Employee_ID>
+      <wd:Name>Evelyn Shaw</wd:Name>
+    </wd:Manager>
+    <wd:Cost_Center_Allocation>
+      <wd:Cost_Center_ID>CC-1400</wd:Cost_Center_ID>
+      <wd:Percent>100</wd:Percent>
+    </wd:Cost_Center_Allocation>
+    <wd:Annual_Compensation>
+      <wd:Amount>81000</wd:Amount>
+      <wd:Currency>USD</wd:Currency>
+    </wd:Annual_Compensation>
+  </wd:Report_Entry>
+  <wd:Report_Entry>
+    <wd:Employee_ID>100301</wd:Employee_ID>
+    <wd:Legal_Name>
+      <wd:First_Name>Evelyn</wd:First_Name>
+      <wd:Last_Name>Shaw</wd:Last_Name>
+    </wd:Legal_Name>
+    <wd:Worker_Type>Employee</wd:Worker_Type>
+    <wd:Active>1</wd:Active>
+    <wd:Hire_Date>2012-06-01</wd:Hire_Date>
+    <wd:Email_Work>evelyn.shaw@example.edu</wd:Email_Work>
+    <wd:Job_Profile>Director, Finance Systems</wd:Job_Profile>
+    <wd:Cost_Center_Allocation>
+      <wd:Cost_Center_ID>CC-1600</wd:Cost_Center_ID>
+      <wd:Percent>100</wd:Percent>
+    </wd:Cost_Center_Allocation>
+    <wd:Annual_Compensation>
+      <wd:Amount>198000</wd:Amount>
+      <wd:Currency>USD</wd:Currency>
+    </wd:Annual_Compensation>
+  </wd:Report_Entry>
+</wd:Report_Data>
+</script>
+
+<script>
+(function () {
+  "use strict";
+
+  var WD_NS = "urn:com.workday/bsvc";
+  var xmlText = document.getElementById("src-xml").textContent.trim();
+  document.getElementById("xmlview").textContent = xmlText;
+
+  var doc = new DOMParser().parseFromString(xmlText, "application/xml");
+  if (doc.getElementsByTagName("parsererror").length) {
+    document.body.insertAdjacentHTML("afterbegin", "<p style='color:#b23b2e;padding:12px'>Source document failed to parse.</p>");
+  }
+
+  function resolver(prefix) { return prefix === "wd" ? WD_NS : null; }
+
+  // Reference expressions, lightly encoded so the answers are not sitting in
+  // plain sight in the page source. This is obfuscation, not security — the
+  // report records the candidate's literal expression for review either way.
+  function ref(b) { return atob(b).trim(); }
+
+  var TASKS = [
+    {
+      level: "Warm-up",
+      prompt: "Select every worker record in this report.",
+      ref: "Ly93ZDpSZXBvcnRfRW50cnk=",
+      hint: "If an unprefixed path returns nothing, ask yourself what the document's default namespace situation is."
+    },
+    {
+      level: "Core",
+      prompt: "Return the Employee_ID of every contingent worker.",
+      ref: "Ly93ZDpSZXBvcnRfRW50cnlbd2Q6V29ya2VyX1R5cGU9J0NvbnRpbmdlbnQgV29ya2VyJ10vd2Q6RW1wbG95ZWVfSUQ=",
+      hint: "A predicate comparing a child element to a string literal is enough here."
+    },
+    {
+      level: "Core",
+      prompt: "Select every worker record that has a termination date at all — regardless of what the date is.",
+      ref: "Ly93ZDpSZXBvcnRfRW50cnlbd2Q6VGVybWluYXRpb25fRGF0ZV0=",
+      hint: "Existence of a node is itself a boolean in a predicate. You do not need to compare it to anything."
+    },
+    {
+      level: "Trap",
+      prompt: "Return the Employee_ID of every worker whose termination date is on or after 2026-09-28. Read your result carefully — the obvious expression is wrong here, and the engine will not warn you.",
+      ref: "Ly93ZDpSZXBvcnRfRW50cnlbdHJhbnNsYXRlKHdkOlRlcm1pbmF0aW9uX0RhdGUsJy0nLCcnKSA+PSAyMDI2MDkyOF0vd2Q6RW1wbG95ZWVfSUQ=",
+      hint: "In XPath 1.0 the relational operators convert both sides to numbers, and '2026-09-28' is not a number. Make the comparison numeric yourself."
+    },
+    {
+      level: "Core",
+      prompt: "Select every worker record that has no manager element.",
+      ref: "Ly93ZDpSZXBvcnRfRW50cnlbbm90KHdkOk1hbmFnZXIpXQ==",
+      hint: "Negate the existence test you used in task 3."
+    },
+    {
+      level: "Core",
+      prompt: "Return the Employee_ID of every worker with any allocation to cost center CC-1400, including workers who are only partly allocated to it.",
+      ref: "Ly93ZDpSZXBvcnRfRW50cnlbd2Q6Q29zdF9DZW50ZXJfQWxsb2NhdGlvbi93ZDpDb3N0X0NlbnRlcl9JRD0nQ0MtMTQwMCddL3dkOkVtcGxveWVlX0lE",
+      hint: "A predicate containing a multi-step path is true if any node on that path matches."
+    },
+    {
+      level: "Core",
+      prompt: "Return the number of workers who are both Worker_Type 'Employee' and Active '1'. The result should be a number, not a node set.",
+      ref: "Y291bnQoLy93ZDpSZXBvcnRfRW50cnlbd2Q6V29ya2VyX1R5cGU9J0VtcGxveWVlJ11bd2Q6QWN0aXZlPScxJ10p",
+      hint: "Two predicates in sequence behave as an AND."
+    },
+    {
+      level: "Deep",
+      prompt: "Return the Cost_Center_ID of each worker's second cost centre allocation. Only workers who actually have a second one should appear.",
+      ref: "Ly93ZDpSZXBvcnRfRW50cnkvd2Q6Q29zdF9DZW50ZXJfQWxsb2NhdGlvblsyXS93ZDpDb3N0X0NlbnRlcl9JRA==",
+      hint: "Positional predicates apply per context node. Note how this differs from wrapping the whole path in parentheses first."
+    },
+    {
+      level: "Deep",
+      prompt: "Return the work email address of the manager of employee 100211 — resolved from the data, not hard-coded. The manager appears elsewhere in the file as a worker in their own right.",
+      ref: "Ly93ZDpSZXBvcnRfRW50cnlbd2Q6RW1wbG95ZWVfSUQgPSAvL3dkOlJlcG9ydF9FbnRyeVt3ZDpFbXBsb3llZV9JRD0nMTAwMjExJ10vd2Q6TWFuYWdlci93ZDpFbXBsb3llZV9JRF0vd2Q6RW1haWxfV29yaw==",
+      hint: "A predicate can contain another absolute path. Use the inner path to produce the manager's ID and compare the outer worker's ID against it."
+    },
+    {
+      level: "Stretch",
+      prompt: "Select the Annual_Compensation Amount element belonging to the highest-paid worker, without hard-coding the value.",
+      ref: "Ly93ZDpBbW91bnRbbm90KC4gPCAvL3dkOkFtb3VudCldCg==",
+      hint: "XPath 1.0 has no max(). A node compared against a whole node set is true if it holds for any member — so express 'nothing is greater than me'."
+    }
+  ];
+
+  var SHORTS = [
+    {
+      prompt: "Task 1: if your first attempt had been //Report_Entry it would have returned nothing, in this page and in a real Workday feed. Explain why, and give two ways you would deal with it in a tool where you cannot register a namespace prefix."
+    },
+    {
+      prompt: "Task 4: describe exactly what XPath 1.0 does when you write Termination_Date >= '2026-09-28'. Then tell us how you would implement a genuine 'terminated in the last 7 days' filter in a scheduled Workday outbound integration — including where you would prefer that filter to live."
+    },
+    {
+      prompt: "Write the XSLT template that turns this document into a pipe-delimited file: one line per worker with Employee_ID|Last,First|first allocation's cost centre|annual amount, followed by a trailer line reading TRAILER|<record count>. State whether you are writing 1.0 or 2.0 and note anything you would do differently in the other version."
+    }
+  ];
+
+  var state = TASKS.map(function () { return { attempts: 0, hint: false, solved: false, firstTrySolved: false, answer: "", solvedAt: null }; });
+  var shortState = SHORTS.map(function () { return ""; });
+  var started = null;
+
+  function startClock() {
+    if (started) return;
+    started = Date.now();
+    setInterval(function () {
+      document.getElementById("clock").textContent = elapsed();
+      document.getElementById("s-time").textContent = elapsed();
+    }, 1000);
+  }
+  function elapsed() {
+    if (!started) return "00:00";
+    var s = Math.floor((Date.now() - started) / 1000);
+    return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
+  }
+
+  function run(expr) {
+    var r = doc.evaluate(expr, doc, resolver, XPathResult.ANY_TYPE, null);
+    if (r.resultType === XPathResult.NUMBER_TYPE) return { kind: "number", value: r.numberValue, sig: "num:" + r.numberValue };
+    if (r.resultType === XPathResult.STRING_TYPE) return { kind: "string", value: r.stringValue, sig: "str:" + r.stringValue.trim() };
+    if (r.resultType === XPathResult.BOOLEAN_TYPE) return { kind: "boolean", value: r.booleanValue, sig: "bool:" + r.booleanValue };
+    var nodes = [], n;
+    var it = doc.evaluate(expr, doc, resolver, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+    while ((n = it.iterateNext())) nodes.push(n);
+    var parts = nodes.map(function (nd) {
+      var name = nd.nodeName || nd.localName || "#" + nd.nodeType;
+      var txt = (nd.textContent || "").replace(/\s+/g, " ").trim();
+      return name + "=" + txt;
+    });
+    return { kind: "nodes", nodes: nodes, value: parts, sig: "set:" + parts.slice().sort().join("||") };
+  }
+
+  function expected(i) { return run(ref(TASKS[i].ref)).sig; }
+
+  function describe(res) {
+    if (res.kind === "number") return "number → " + res.value;
+    if (res.kind === "string") return "string → " + JSON.stringify(res.value);
+    if (res.kind === "boolean") return "boolean → " + res.value;
+    if (!res.value.length) return "empty node set — 0 nodes matched";
+    return res.value.length + " node" + (res.value.length === 1 ? "" : "s") + ":\n" + res.value.join("\n");
+  }
+
+  function refresh() {
+    var solved = state.filter(function (s) { return s.solved; }).length;
+    var attempts = state.reduce(function (a, s) { return a + s.attempts; }, 0);
+    var hints = state.filter(function (s) { return s.hint; }).length;
+    document.getElementById("solved").textContent = solved;
+    document.getElementById("s-solved").textContent = solved;
+    document.getElementById("s-attempts").textContent = attempts;
+    document.getElementById("s-hints").textContent = hints;
+  }
+
+  var host = document.getElementById("tasks");
+  TASKS.forEach(function (t, i) {
+    var el = document.createElement("div");
+    el.className = "task";
+    el.innerHTML =
+      '<div class="thead"><span class="num">' + String(i + 1).padStart(2, "0") + '</span>' +
+      '<span class="tag">' + t.level + '</span></div>' +
+      '<div class="prompt"></div>' +
+      '<div class="row"><input type="text" spellcheck="false" placeholder="XPath expression" /><button class="primary">Run</button></div>' +
+      '<div class="out"></div>' +
+      '<button class="link">Show hint</button>' +
+      '<div class="counter"></div>';
+    el.querySelector(".prompt").textContent = t.prompt;
+    host.appendChild(el);
+
+    var input = el.querySelector("input");
+    var out = el.querySelector(".out");
+    var counter = el.querySelector(".counter");
+    var hintBtn = el.querySelector(".link");
+
+    hintBtn.addEventListener("click", function () {
+      if (state[i].hint) return;
+      state[i].hint = true;
+      var h = document.createElement("div");
+      h.className = "hint";
+      h.textContent = t.hint;
+      hintBtn.insertAdjacentElement("afterend", h);
+      hintBtn.remove();
+      refresh();
+    });
+
+    function go() {
+      var expr = input.value.trim();
+      if (!expr) return;
+      startClock();
+      state[i].attempts++;
+      state[i].answer = expr;
+      var res, err = null;
+      try { res = run(expr); } catch (e) { err = e; }
+      if (err) {
+        el.className = "task wrong";
+        out.innerHTML = '<span class="verdict fail">Invalid expression</span><div class="nodes"><code></code></div>';
+        out.querySelector("code").textContent = String(err.message || err);
+      } else {
+        var ok = res.sig === expected(i);
+        if (ok && !state[i].solved) {
+          state[i].solved = true;
+          state[i].solvedAt = elapsed();
+          state[i].firstTrySolved = state[i].attempts === 1 && !state[i].hint;
+        }
+        el.className = "task " + (ok ? "done" : "wrong");
+        out.innerHTML = '<span class="verdict ' + (ok ? "pass" : "fail") + '">' +
+          (ok ? "Correct" : "Not the expected result") + '</span><div class="nodes"><code></code></div>';
+        out.querySelector("code").textContent = describe(res);
+      }
+      counter.textContent = state[i].attempts + " run" + (state[i].attempts === 1 ? "" : "s") +
+        (state[i].solved ? " · solved at " + state[i].solvedAt : "");
+      refresh();
+    }
+
+    el.querySelector("button.primary").addEventListener("click", go);
+    input.addEventListener("keydown", function (e) { if (e.key === "Enter") go(); });
+    input.addEventListener("focus", startClock);
+  });
+
+  var shost = document.getElementById("shorts");
+  SHORTS.forEach(function (s, i) {
+    var el = document.createElement("div");
+    el.className = "sa";
+    el.innerHTML = '<div class="prompt"></div><textarea spellcheck="true" placeholder="Your answer"></textarea>';
+    el.querySelector(".prompt").textContent = "W" + (i + 1) + ". " + s.prompt;
+    shost.appendChild(el);
+    var ta = el.querySelector("textarea");
+    ta.addEventListener("focus", startClock);
+    ta.addEventListener("input", function () { shortState[i] = ta.value; });
+  });
+
+  function buildReport() {
+    var who = document.getElementById("who").value.trim() || "(name not entered)";
+    var solved = state.filter(function (s) { return s.solved; }).length;
+    var clean = state.filter(function (s) { return s.firstTrySolved; }).length;
+    var L = [];
+    L.push("WORKDAY INTEGRATION DEVELOPER — XPATH EXERCISE");
+    L.push("Candidate: " + who);
+    L.push("Completed: " + new Date().toString());
+    L.push("Elapsed: " + elapsed());
+    L.push("Solved: " + solved + "/" + TASKS.length + "  |  solved first try without a hint: " + clean +
+           "  |  total runs: " + state.reduce(function (a, s) { return a + s.attempts; }, 0) +
+           "  |  hints opened: " + state.filter(function (s) { return s.hint; }).length);
+    L.push("");
+    L.push("--- XPATH TASKS ---");
+    TASKS.forEach(function (t, i) {
+      var s = state[i];
+      L.push("");
+      L.push(String(i + 1).padStart(2, "0") + ". [" + t.level + "] " + t.prompt);
+      L.push("    result   : " + (s.solved ? "SOLVED at " + s.solvedAt : s.attempts ? "not solved" : "not attempted"));
+      L.push("    runs     : " + s.attempts + (s.hint ? "   (hint opened)" : ""));
+      L.push("    final    : " + (s.answer || "-"));
+    });
+    L.push("");
+    L.push("--- WRITTEN ANSWERS ---");
+    SHORTS.forEach(function (s, i) {
+      L.push("");
+      L.push("W" + (i + 1) + ". " + s.prompt);
+      L.push("");
+      L.push((shortState[i] || "(no answer)").split("\n").map(function (x) { return "    " + x; }).join("\n"));
+    });
+    L.push("");
+    L.push("--- END ---");
+    return L.join("\n");
+  }
+
+  document.getElementById("gen").addEventListener("click", function () {
+    document.getElementById("report").value = buildReport();
+  });
+  document.getElementById("copy").addEventListener("click", function () {
+    var ta = document.getElementById("report");
+    if (!ta.value) ta.value = buildReport();
+    ta.select();
+    navigator.clipboard.writeText(ta.value).then(function () {
+      var b = document.getElementById("copy");
+      b.textContent = "Copied";
+      setTimeout(function () { b.textContent = "Copy"; }, 1600);
+    }, function () { document.execCommand("copy"); });
+  });
+  document.getElementById("dl").addEventListener("click", function () {
+    var ta = document.getElementById("report");
+    if (!ta.value) ta.value = buildReport();
+    var who = (document.getElementById("who").value.trim() || "candidate").replace(/[^a-z0-9]+/gi, "-").toLowerCase();
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([ta.value], { type: "text/plain" }));
+    a.download = "xpath-exercise-" + who + ".txt";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  refresh();
+})();
+</script>
+</body>
+</html>
